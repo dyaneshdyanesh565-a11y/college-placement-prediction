@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Placement Prediction System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="page">
+
+    <!-- HEADER -->
+    <header>
+
+        <div class="logo">
+            🎓 PlacementAI
+        </div>
+
+        <div class="header-text">
+            College Placement Prediction
+        </div>
+
+    </header>
+
+
+    <main>
+
+        <!-- HERO -->
+        <section class="hero">
+
+            <h1>
+                College Placement Prediction System
+            </h1>
+
+            <p>
+                Analyze your academic and professional profile
+                using Machine Learning.
+            </p>
+
+        </section>
+
+
+        <!-- STUDENT FORM -->
+        <section class="card">
+
+            <h2>
+                Student Details
+            </h2>
+
+            <p class="description">
+                Enter your details below to predict your placement chances.
+            </p>
+
+
+            <form method="POST">
+
+                <div class="form-grid">
+
+
+                    <!-- STUDENT NAME -->
+                    <div class="input-group">
+
+                        <label>
+                            Student Name
+                        </label>
+
+                        <input
+                            type="text"
+                            name="student_name"
+                            placeholder="Enter your name"
+                            required>
+
+                    </div>
+
+
+                    <!-- CGPA -->
+                    <div class="input-group">
+
+                        <label>
+                            CGPA
+                        </label>
+
+                        <input
+                            type="number"
+                            name="cgpa"
+                            min="0"
+                            max="10"
+                            step="0.01"
+                            placeholder="8.5"
+                            required>
+
+                    </div>
+
+
+                    <!-- APTITUDE -->
+                    <div class="input-group">
+
+                        <label>
+                            Aptitude Score
+                        </label>
+
+                        <input
+                            type="number"
+                            name="aptitude"
+                            min="0"
+                            max="100"
+                            placeholder="85"
+                            required>
+
+                    </div>
+
+
+                    <!-- TECHNICAL SKILLS -->
+                    <div class="input-group">
+
+                        <label>
+                            Technical Skills
+                        </label>
+
+                        <input
+                            type="number"
+                            name="skills"
+                            min="0"
+                            placeholder="8"
+                            required>
+
+                    </div>
+
+
+                    <!-- INTERNSHIPS -->
+                    <div class="input-group">
+
+                        <label>
+                            Internships
+                        </label>
+
+                        <input
+                            type="number"
+                            name="internships"
+                            min="0"
+                            placeholder="2"
+                            required>
+
+                    </div>
+
+
+                    <!-- PROJECTS -->
+                    <div class="input-group">
+
+                        <label>
+                            Projects
+                        </label>
+
+                        <input
+                            type="number"
+                            name="projects"
+                            min="0"
+                            placeholder="3"
+                            required>
+
+                    </div>
+
+
+                    <!-- COMMUNICATION -->
+                    <div class="input-group">
+
+                        <label>
+                            Communication Score
+                        </label>
+
+                        <input
+                            type="number"
+                            name="communication"
+                            min="1"
+                            max="10"
+                            placeholder="8"
+                            required>
+
+                    </div>
+
+
+                    <!-- BACKLOGS -->
+                    <div class="input-group">
+
+                        <label>
+                            Backlogs
+                        </label>
+
+                        <input
+                            type="number"
+                            name="backlogs"
+                            min="0"
+                            placeholder="0"
+                            required>
+
+                    </div>
+
+
+                    <!-- CERTIFICATIONS -->
+                    <div class="input-group">
+
+                        <label>
+                            Certifications
+                        </label>
+
+                        <input
+                            type="number"
+                            name="certifications"
+                            min="0"
+                            placeholder="4"
+                            required>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PREDICT BUTTON -->
+                <button type="submit">
+
+                    🔮 Predict Placement
+
+                </button>
+
+            </form>
+
+        </section>
+
+
+
+        <!-- RESULT -->
+        {% if result %}
+
+        <section class="result-card">
+
+
+            <div class="result-icon">
+
+                {% if "Likely" in result %}
+                    ✅
+                {% else %}
+                    ⚠️
+                {% endif %}
+
+            </div>
+
+
+            <h2>
+                {{ result }}
+            </h2>
+
+
+            <!-- STUDENT NAME -->
+            <p class="student-welcome">
+
+                Student:
+                <strong>{{ student_name }}</strong>
+
+            </p>
+
+
+            <!-- CONFIDENCE -->
+            <div class="probability">
+
+                <span>
+                    Prediction Confidence
+                </span>
+
+                <strong>
+                    {{ probability }}%
+                </strong>
+
+            </div>
+
+
+            <!-- PROGRESS -->
+            <div class="progress">
+
+                <div
+                    class="progress-bar"
+                    style="width: {{ probability }}%;">
+                </div>
+
+            </div>
+
+
+            <!-- SUGGESTIONS -->
+            <div class="suggestions">
+
+                <h3>
+                    💡 Improvement Suggestions
+                </h3>
+
+
+                <ul>
+
+                    {% for suggestion in suggestions %}
+
+                    <li>
+                        {{ suggestion }}
+                    </li>
+
+                    {% endfor %}
+
+                </ul>
+
+            </div>
+
+
+            <!-- DOWNLOAD REPORT -->
+            <a
+                href="{{ url_for('download_report') }}"
+                class="download-button">
+
+                📄 Download Placement Report
+
+            </a>
+
+
+        </section>
+
+        {% endif %}
+
+
+
+        <!-- FEATURES -->
+        <section class="features">
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    🤖
+                </div>
+
+                <h3>
+                    Machine Learning
+                </h3>
+
+                <p>
+                    Uses a Random Forest classification model
+                    to make predictions.
+                </p>
+
+            </div>
+
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    📊
+                </div>
+
+                <h3>
+                    Profile Analysis
+                </h3>
+
+                <p>
+                    Analyzes academic, technical and
+                    professional factors.
+                </p>
+
+            </div>
+
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    💡
+                </div>
+
+                <h3>
+                    Career Suggestions
+                </h3>
+
+                <p>
+                    Provides suggestions to improve
+                    placement readiness.
+                </p>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- MODEL PERFORMANCE -->
+        <section class="performance">
+
+
+            <h2>
+                📊 Model Performance
+            </h2>
+
+
+            <p class="performance-description">
+
+                Performance of the Machine Learning model
+                evaluated on the test dataset.
+
+            </p>
+
+
+
+            <div class="performance-grid">
+
+
+                <!-- ACCURACY -->
+                <div class="performance-card">
+
+                    <div class="performance-icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        91%
+                    </h3>
+
+                    <p>
+                        Accuracy
+                    </p>
+
+                </div>
+
+
+
+                <!-- TRAINING -->
+                <div class="performance-card">
+
+                    <div class="performance-icon">
+                        📚
+                    </div>
+
+                    <h3>
+                        500
+                    </h3>
+
+                    <p>
+                        Training Records
+                    </p>
+
+                </div>
+
+
+
+                <!-- TEST -->
+                <div class="performance-card">
+
+                    <div class="performance-icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        100
+                    </h3>
+
+                    <p>
+                        Test Records
+                    </p>
+
+                </div>
+
+
+
+                <!-- ALGORITHM -->
+                <div class="performance-card">
+
+                    <div class="performance-icon">
+                        🌲
+                    </div>
+
+                    <h3>
+                        Random Forest
+                    </h3>
+
+                    <p>
+                        Algorithm
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- CHARTS -->
+            <div class="charts">
+
+
+                <!-- CONFUSION MATRIX -->
+                <div class="chart-card">
+
+                    <h3>
+                        Confusion Matrix
+                    </h3>
+
+                    <img
+                        src="{{ url_for('static', filename='confusion_matrix.png') }}"
+                        alt="Confusion Matrix">
+
+                </div>
+
+
+
+                <!-- FEATURE IMPORTANCE -->
+                <div class="chart-card">
+
+                    <h3>
+                        Feature Importance
+                    </h3>
+
+                    <img
+                        src="{{ url_for('static', filename='feature_importance.png') }}"
+                        alt="Feature Importance">
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- FOOTER -->
+    <footer>
+
+        College Placement Prediction System
+        • Machine Learning Project
+
+    </footer>
+
+
+</div>
+
+</body>
+
+</html>
